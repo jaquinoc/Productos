@@ -1,0 +1,126 @@
+{% extends 'home.html.twig' %}
+
+{% block title %}Productos{% endblock %}
+
+{% block body %}
+    {% for message in app.flashes('Exito') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% for message in app.flashes('Error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="card">
+        <div class="card-header">
+          <h3 class="card-title text-bold">LISTADO DE PRODUCTOS</h3>
+        </div>
+        <div class="card-body">
+            <table id="tabla_productos" class="table table-bordered rounded table-striped">
+              <thead>
+                  <th class="text-center">CODIGO</th>
+                  <th class="text-center">NOMBRE</th>
+                  <th class="text-center">MARCA</th>
+                  <th class="text-center">CATEGORIA</th>
+                  <th class="text-center">PRECIO</th>
+                  <th class="text-center" style="width: 100px;">ACCION</th>
+              </thead>
+              <tbody>
+                {% for product in listar  %}
+                    <tr>
+                        <td>{{ product.code }}</td>
+                        <td>{{ product.name }}</td>
+                        <td class="text-center">{{ product.brand }}</td>
+                        <td class="text-center">{{ product.getCategory() }}</td>
+                        <td class="text-right">{{ product.price }}</td>
+                        <td class="text-center">
+                            <a href="{{ path('verproducto', {id:product.id}) }}"><i class="fa fa-lg fa-eye fa-default"></i></a>&nbsp;&nbsp;&nbsp;
+                            <a href="{{ path('editarproducto', {id:product.id}) }}"><i class="fa fa-lg fa-edit fa-primary"></i></a>&nbsp;&nbsp;&nbsp;
+                            <a href="{{ path('borrarproducto', {id:product.id}) }}"><i class="fa fa-lg fa-trash fa-danger"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="6" class="text-right">
+                    <a class="btn btn-primary" href="{{ path('agregarproducto') }}">Insertar</a>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+        </div>
+    </div>
+
+<script>
+    $(document).ready(function() {
+      $('#tabla_productos').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "iDisplayLength": 10
+      });
+
+      $('#form').validate({
+        errorClass: 'help-block',
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid').addClass('is-valid');
+        }
+      });
+
+      $("#enviar").click(function(event){
+        var mante = $("#enviar").val();
+        if(mante=="Eliminar"){
+      	  event.preventDefault();
+          BootstrapDialog.show({
+            title: 'Confirmación',
+            message: 'Desea eliminar el registro de la base de datos?',
+            buttons: [{
+              label: 'Cerrar',
+              action: function(dialogItself){
+                dialogItself.close();
+              }
+            },{
+              label: 'Eliminar',
+              cssClass: 'btn-danger',
+              action: function(){
+                $("#form" ).submit();
+              }
+            }]
+          });
+        }
+      });
+
+      $('.custom-control-input').on("change", function() {
+        var id = $(this).attr('data-id');
+        var estado=$(this).prop('checked');
+        var activado="NO";
+        if(estado==true){
+          activado="SI";
+        }
+        $.post("menus/componentes/procesarCambioEstadoComponente.php", { id: id, activado: activado }, function(respuesta){
+          if(respuesta.trim()=="OK"){
+            toastr.success('Se ha modificado el estado correctamente.');
+          }else{
+            toastr.error('No se modificó el estado debido a un error.');
+          }
+        });
+      });
+    });
+</script>
+
+{% endblock %}

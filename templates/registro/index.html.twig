@@ -1,0 +1,38 @@
+{% extends 'registrar.html.twig' %}
+
+{% block title %}Registrar usuario{% endblock %}
+
+{% block body %}
+
+    <div class="register-box">
+      <div class="register-logo">
+        <b>APP</b> Productos
+      </div>
+
+      <div class="card">
+        <div class="card-body register-card-body">
+          <p class="login-box-msg">Registrar nuevo usuario</p>
+
+          {% for message in app.flashes('Exito') %}
+              <div class="alert alert-success">
+                  {{ message }}
+              </div>
+          {% endfor %}
+
+          {{ form(formulario)}}
+
+          <div class="social-auth-links text-center">
+            <p>- O -</p>
+          </div>
+
+          <a href="{{ path('app_login') }}" class="text-center">Loguearme</a>
+        </div>
+        <!-- /.form-box -->
+      </div><!-- /.card -->
+    </div>
+    <!-- /.register-box -->
+
+
+
+
+{% endblock %}

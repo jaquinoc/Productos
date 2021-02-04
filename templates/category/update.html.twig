@@ -1,0 +1,36 @@
+{% extends 'home.html.twig' %}
+
+{% block title %}Modificar categoría{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header">
+          <h3 class="card-title text-bold">MODIFICAR CATEGORIA</h3>
+        </div>
+        <div class="card-body">
+            {{ form(form)}}
+        </div>
+    </div>
+
+<script>
+    $(document).ready(function() {
+
+      $('#form').validate({
+        errorClass: 'help-block',
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid').addClass('is-valid');
+        }
+      });
+
+    });
+</script>
+
+{% endblock %}

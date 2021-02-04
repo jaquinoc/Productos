@@ -1,0 +1,59 @@
+{% extends 'home.html.twig' %}
+
+{% block title %}Eliminar categoría{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <div class="card-header">
+          <h3 class="card-title text-bold">ELIMINAR CATEGORIA</h3>
+        </div>
+        <div class="card-body">
+            {{ form(form)}}
+        </div>
+    </div>
+
+<script>
+    $(document).ready(function() {
+
+    $('#category_Guardar').html('Eliminar');
+    $('#category_Guardar').removeClass('btn-primary').addClass('btn-danger');
+
+      $('#form').validate({
+        errorClass: 'help-block',
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid').addClass('is-valid');
+        }
+      });
+
+      $("#category_Guardar").click(function(event){
+      	  event.preventDefault();
+          BootstrapDialog.show({
+            title: 'Confirmación',
+            message: 'Desea eliminar el registro de la base de datos?',
+            buttons: [{
+              label: 'Cerrar',
+              action: function(dialogItself){
+                dialogItself.close();
+              }
+            },{
+              label: 'Eliminar',
+              cssClass: 'btn-danger',
+              action: function(){
+                $("#form" ).submit();
+              }
+            }]
+          });
+      });
+
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'login.html.twig' %}
+
+{% block title %}Login!{% endblock %}
+
+{% block body %}
+
+<div class="login-box">
+  <div class="login-logo">
+    <b>APP</b> Productos
+  </div>
+  <!-- /.login-logo -->
+  <div class="card">
+    <div class="card-body login-card-body">
+      <p class="login-box-msg">Ingrese los datos de acceso</p>
+
+      <form method="post">
+          {% if error %}
+              <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+          {% endif %}
+
+          {% if app.user %}
+              <div class="mb-3">
+                  Está logueado como: <br />
+                  {{ app.user.username }} <br />
+                  <a href="{{ path('app_logout') }}">Cerrar sesión</a>
+              </div>
+          {% endif %}
+
+          <div class="input-group mb-3">
+              <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-envelope"></span>
+                </div>
+              </div>
+          </div>
+          <div class="input-group mb-3">
+            <input type="password" name="password" id="inputPassword" class="form-control"  placeholder="Password" required>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+
+          <input type="hidden" name="_csrf_token"
+                 value="{{ csrf_token('authenticate') }}"
+          >
+
+          {#
+              Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+              See https://symfony.com/doc/current/security/remember_me.html
+
+              <div class="checkbox mb-3">
+                  <label>
+                      <input type="checkbox" name="_remember_me"> Remember me
+                  </label>
+              </div>
+          #}
+
+          <button class="btn btn-primary btn-block" type="submit">
+              Ingresar
+          </button>
+      </form>
+
+      <div class="social-auth-links text-center mb-3">
+        <p>- O -</p>
+      <p class="mb-0">
+        <a href="{{ path('registro') }}" class="text-center">Registrarme</a>
+      </p>
+    </div>
+    <!-- /.login-card-body -->
+  </div>
+</div>
+<!-- /.login-box -->
+
+{% endblock %}
